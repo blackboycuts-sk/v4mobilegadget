@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mobile Shop Admin - Login</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Login Page -->
+    <div id="loginPage" class="page active">
+        <div class="login-container">
+            <div class="login-card">
+                <h1>Mobile Shop Admin</h1>
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" id="username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Login</button>
+                </form>
+                <p class="login-hint">Default: admin / admin123</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dashboard -->
+    <div id="dashboardPage" class="page">
+        <header class="header">
+            <div class="header-content">
+                <h1 id="shopNameHeader">Mobile Shop Admin</h1>
+                <button id="logoutBtn" class="btn btn-secondary">Logout</button>
+            </div>
+        </header>
+
+        <nav class="nav-tabs">
+            <button class="nav-tab active" data-page="dashboard">Dashboard</button>
+            <button class="nav-tab" data-page="products">Products</button>
+            <button class="nav-tab" data-page="billing">Billing</button>
+            <button class="nav-tab" data-page="history">History</button>
+            <button class="nav-tab" data-page="reports">Reports</button>
+            <button class="nav-tab" data-page="settings">Settings</button>
+        </nav>
+
+        <main class="main-content">
+            <!-- Dashboard Tab -->
+            <div id="dashboardTab" class="tab-content active">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>Total Products</h3>
+                        <p id="totalProducts">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Low Stock Items</h3>
+                        <p id="lowStockCount">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Total Sales</h3>
+                        <p id="totalSales">₹0</p>
+                    </div>
+                </div>
+                <div class="alert-section">
+                    <h2>Low Stock Alerts</h2>
+                    <div id="lowStockAlerts"></div>
+                </div>
+            </div>
+
+            <!-- Products Tab -->
+            <div id="productsTab" class="tab-content">
+                <div class="section-header">
+                    <h2>Product Management</h2>
+                    <button class="btn btn-primary" id="addProductBtn">Add Product</button>
+                </div>
+                <div class="products-grid" id="productsGrid"></div>
+            </div>
+
+            <!-- Billing Tab -->
+            <div id="billingTab" class="tab-content">
+                <div class="billing-container">
+                    <div class="billing-left">
+                        <div class="customer-section">
+                            <h2>Customer Details</h2>
+                            <div class="form-group">
+                                <label for="customerName">Customer Name *</label>
+                                <input type="text" id="customerName" placeholder="Enter customer name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="customerPhone">Phone Number *</label>
+                                <input type="tel" id="customerPhone" placeholder="Enter phone number" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="customerGSTIN">GSTIN (Optional)</label>
+                                <input type="text" id="customerGSTIN" placeholder="Enter GSTIN">
+                            </div>
+                            <div class="form-group">
+                                <label for="warrantyNote">Warranty/IMEI Note</label>
+                                <textarea id="warrantyNote" rows="2" placeholder="Enter warranty or IMEI details"></textarea>
+                            </div>
+                        </div>
+                        <div class="section-header">
+                            <h2>Add Items</h2>
+                            <input type="text" id="productSearch" placeholder="Search products..." class="search-input">
+                        </div>
+                        <div class="products-list" id="billingProductsList"></div>
+                    </div>
+                    <div class="billing-right">
+                        <div class="cart-section">
+                            <h2>Cart</h2>
+                            <div id="cartItems"></div>
+                            <div class="cart-summary">
+                                <div class="summary-row">
+                                    <span>Subtotal:</span>
+                                    <span id="subtotal">₹0</span>
+                                </div>
+                                <div class="summary-row">
+                                    <label>Bill Discount (%):</label>
+                                    <input type="number" id="billDiscountPercent" min="0" max="100" value="0" class="input-small">
+                                </div>
+                                <div class="summary-row">
+                                    <span>Bill Discount:</span>
+                                    <span id="billDiscountAmount">₹0</span>
+                                </div>
+                                <div class="summary-row">
+                                    <span>Total Taxable:</span>
+                                    <span id="totalTaxable">₹0</span>
+                                </div>
+                                <div class="summary-row">
+                                    <span>Total GST:</span>
+                                    <span id="totalGSTAmount">₹0</span>
+                                </div>
+                                <div class="summary-row total">
+                                    <span>Grand Total:</span>
+                                    <span id="totalAmount">₹0</span>
+                                </div>
+                            </div>
+                            <div class="cart-actions">
+                                <button class="btn btn-primary" id="previewInvoiceBtn">Preview Invoice</button>
+                                <button class="btn btn-primary" id="generateInvoiceBtn">Generate & Save</button>
+                                <button class="btn btn-secondary" id="clearCartBtn">Clear Cart</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- History Tab -->
+            <div id="historyTab" class="tab-content">
+                <div class="section-header">
+                    <h2>Bill History</h2>
+                    <div class="search-filters">
+                        <input type="text" id="historySearch" placeholder="Search by invoice no, customer..." class="search-input">
+                        <input type="date" id="historyDateFrom" class="input-date">
+                        <input type="date" id="historyDateTo" class="input-date">
+                        <button class="btn btn-secondary" id="clearHistoryFiltersBtn">Clear</button>
+                    </div>
+                </div>
+                <div id="historyList"></div>
+            </div>
+
+            <!-- Reports Tab -->
+            <div id="reportsTab" class="tab-content">
+                <div class="reports-container">
+                    <div class="report-filters">
+                        <h2>Reports</h2>
+                        <div class="filter-group">
+                            <label>Report Type:</label>
+                            <select id="reportType" class="select-input">
+                                <option value="daily">Daily Sales</option>
+                                <option value="monthly">Monthly Sales</option>
+                                <option value="tax">Tax Summary</option>
+                                <option value="topsellers">Top Sellers</option>
+                                <option value="lowstock">Low Stock Items</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label>Date From:</label>
+                            <input type="date" id="reportDateFrom" class="input-date">
+                        </div>
+                        <div class="filter-group">
+                            <label>Date To:</label>
+                            <input type="date" id="reportDateTo" class="input-date">
+                        </div>
+                        <button class="btn btn-primary" id="generateReportBtn">Generate Report</button>
+                        <button class="btn btn-success" id="exportCSVBtn">Export to CSV</button>
+                    </div>
+                    <div id="reportResults"></div>
+                </div>
+            </div>
+
+            <!-- Settings Tab -->
+            <div id="settingsTab" class="tab-content">
+                <div class="settings-section">
+                    <h2>Shop Customization</h2>
+                    <div class="form-group">
+                        <label for="shopName">Shop Name</label>
+                        <input type="text" id="shopName" placeholder="Enter shop name">
+                    </div>
+                    <div class="form-group">
+                        <label for="shopAddress">Shop Address</label>
+                        <textarea id="shopAddress" rows="3" placeholder="Enter shop address"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="shopGSTIN">Shop GSTIN</label>
+                        <input type="text" id="shopGSTIN" placeholder="Enter shop GSTIN">
+                    </div>
+                    <div class="form-group">
+                        <label for="shopLogo">Shop Logo URL</label>
+                        <input type="text" id="shopLogo" placeholder="Enter logo URL or data URL">
+                        <input type="file" id="logoFile" accept="image/*">
+                        <button class="btn btn-secondary" id="uploadLogoBtn">Upload Logo</button>
+                    </div>
+                    <div class="form-group">
+                        <label for="themeColor">Theme Color</label>
+                        <input type="color" id="themeColor" value="#007bff">
+                    </div>
+                    <button class="btn btn-primary" id="saveSettingsBtn">Save Settings</button>
+                </div>
+                <div class="settings-section">
+                    <h2>UPI Payment Settings</h2>
+                    <div class="form-group">
+                        <label for="upiId">UPI ID</label>
+                        <input type="text" id="upiId" placeholder="yourname@paytm">
+                    </div>
+                    <div class="form-group">
+                        <label for="upiAmount">Amount (optional)</label>
+                        <input type="number" id="upiAmount" placeholder="Leave empty for any amount">
+                    </div>
+                    <button class="btn btn-primary" id="generateUPIQRBtn">Generate UPI QR Code</button>
+                    <div id="upiQRCode"></div>
+                </div>
+                <div class="settings-section">
+                    <h2>QR Scanner</h2>
+                    <button class="btn btn-primary" id="scanQRBtn">Scan QR Code</button>
+                    <div id="qrScannerContainer"></div>
+                    <div id="qrScanResult"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Product Modal -->
+    <div id="productModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2 id="modalTitle">Add Product</h2>
+            <form id="productForm">
+                <input type="hidden" id="productId">
+                <div class="form-group">
+                    <label for="productName">Product Name</label>
+                    <input type="text" id="productName" required>
+                </div>
+                <div class="form-group">
+                    <label for="productPrice">Price (₹)</label>
+                    <input type="number" id="productPrice" step="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label for="productQuantity">Quantity</label>
+                    <input type="number" id="productQuantity" min="0" required>
+                </div>
+                <div class="form-group">
+                    <label for="productLowStock">Low Stock Alert (min quantity)</label>
+                    <input type="number" id="productLowStock" min="0" required>
+                </div>
+                <div class="form-group">
+                    <label for="productImage">Product Image URL</label>
+                    <input type="text" id="productImage" placeholder="Enter image URL">
+                    <input type="file" id="productImageFile" accept="image/*">
+                    <button type="button" class="btn btn-secondary" id="uploadProductImageBtn">Upload Image</button>
+                </div>
+                <div class="form-group">
+                    <label for="productDescription">Description</label>
+                    <textarea id="productDescription" rows="3"></textarea>
+                </div>
+                <div class="modal-actions">
+                    <button type="submit" class="btn btn-primary">Save</button>
+                    <button type="button" class="btn btn-secondary" id="cancelProductBtn">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Invoice Modal -->
+    <div id="invoiceModal" class="modal">
+        <div class="modal-content modal-large">
+            <span class="close" id="closeInvoiceModal">&times;</span>
+            <div id="invoiceContent"></div>
+            <div class="modal-actions">
+                <button class="btn btn-primary" id="downloadInvoiceBtn">Download PDF</button>
+                <button class="btn btn-secondary" id="closeInvoiceBtn">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
+
